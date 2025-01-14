@@ -24,12 +24,14 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bookpediakmp.composeapp.generated.resources.Res
 import bookpediakmp.composeapp.generated.resources.favorites
 import bookpediakmp.composeapp.generated.resources.no_favorite_books
@@ -41,6 +43,19 @@ import com.mohanjp.bookPediaKmp.core.presentation.util.DarkBlue
 import com.mohanjp.bookPediaKmp.core.presentation.util.DesertWhite
 import com.mohanjp.bookPediaKmp.core.presentation.util.SandYellow
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
+
+@Composable
+fun BookListScreenRoot(
+    viewModel: BookListViewModel = koinViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    BookListScreen(
+        uiState = uiState,
+        onUiAction = viewModel::onUiAction
+    )
+}
 
 @Composable
 fun BookListScreen(
