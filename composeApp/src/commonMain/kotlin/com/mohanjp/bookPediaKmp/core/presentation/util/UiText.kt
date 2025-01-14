@@ -1,4 +1,4 @@
-package com.mohanjp.bookPediaKmp.core.presentation
+package com.mohanjp.bookPediaKmp.core.presentation.util
 
 import androidx.compose.runtime.Composable
 import org.jetbrains.compose.resources.StringResource

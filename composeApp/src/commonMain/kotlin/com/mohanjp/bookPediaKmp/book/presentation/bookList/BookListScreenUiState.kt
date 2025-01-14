@@ -1,7 +1,7 @@
 package com.mohanjp.bookPediaKmp.book.presentation.bookList
 
 import com.mohanjp.bookPediaKmp.book.domain.model.Book
-import com.mohanjp.bookPediaKmp.core.presentation.UiText
+import com.mohanjp.bookPediaKmp.core.presentation.util.UiText
 
 data class BookListScreenUiState(
     val searchQuery: String = "Kotlin",

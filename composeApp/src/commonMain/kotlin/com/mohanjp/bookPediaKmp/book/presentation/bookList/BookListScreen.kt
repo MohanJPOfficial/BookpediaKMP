@@ -37,9 +37,9 @@ import bookpediakmp.composeapp.generated.resources.no_search_results
 import bookpediakmp.composeapp.generated.resources.search_results
 import com.mohanjp.bookPediaKmp.book.presentation.bookList.components.BookList
 import com.mohanjp.bookPediaKmp.book.presentation.bookList.components.BookSearchBar
-import com.mohanjp.bookPediaKmp.core.presentation.DarkBlue
-import com.mohanjp.bookPediaKmp.core.presentation.DesertWhite
-import com.mohanjp.bookPediaKmp.core.presentation.SandYellow
+import com.mohanjp.bookPediaKmp.core.presentation.util.DarkBlue
+import com.mohanjp.bookPediaKmp.core.presentation.util.DesertWhite
+import com.mohanjp.bookPediaKmp.core.presentation.util.SandYellow
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
