@@ -9,6 +9,7 @@ import com.mohanjp.bookPediaKmp.core.domain.util.onSuccess
 import com.mohanjp.bookPediaKmp.core.presentation.util.toUiText
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.debounce
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -41,10 +43,15 @@ class BookListViewModel(
             _uiState.value
         )
 
+    private val _uiEvent = Channel<BookListScreenUiEvent>()
+    val  uiEvent = _uiEvent.receiveAsFlow()
+
     fun onUiAction(uiAction: BookListScreenUiAction) {
         when (uiAction) {
             is BookListScreenUiAction.OnBookClick -> {
-                // TODO()
+                sendUiEvent(BookListScreenUiEvent.NavigateToNextScreen(
+                    book = uiAction.book
+                ))
             }
 
             is BookListScreenUiAction.OnSearchQueryChange -> {
@@ -114,5 +121,9 @@ class BookListViewModel(
                     )
                 }
             }
+    }
+
+    private fun sendUiEvent(event: BookListScreenUiEvent) = viewModelScope.launch {
+        _uiEvent.send(event)
     }
 }

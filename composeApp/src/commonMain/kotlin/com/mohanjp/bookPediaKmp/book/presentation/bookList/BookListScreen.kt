@@ -37,19 +37,31 @@ import bookpediakmp.composeapp.generated.resources.favorites
 import bookpediakmp.composeapp.generated.resources.no_favorite_books
 import bookpediakmp.composeapp.generated.resources.no_search_results
 import bookpediakmp.composeapp.generated.resources.search_results
+import com.mohanjp.bookPediaKmp.book.domain.model.Book
 import com.mohanjp.bookPediaKmp.book.presentation.bookList.components.BookList
 import com.mohanjp.bookPediaKmp.book.presentation.bookList.components.BookSearchBar
 import com.mohanjp.bookPediaKmp.core.presentation.util.DarkBlue
 import com.mohanjp.bookPediaKmp.core.presentation.util.DesertWhite
+import com.mohanjp.bookPediaKmp.core.presentation.util.ObserveAsEvent
 import com.mohanjp.bookPediaKmp.core.presentation.util.SandYellow
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun BookListScreenRoot(
-    viewModel: BookListViewModel = koinViewModel()
+    viewModel: BookListViewModel = koinViewModel(),
+    navigateToNextScreen: (Book) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    viewModel.uiEvent.ObserveAsEvent { uiEvent ->
+        when(uiEvent) {
+            is BookListScreenUiEvent.NavigateToNextScreen -> {
+                navigateToNextScreen(uiEvent.book)
+            }
+        }
+    }
+
 
     BookListScreen(
         uiState = uiState,

@@ -17,3 +17,7 @@ sealed interface BookListScreenUiAction {
     data class OnBookClick(val book: Book) : BookListScreenUiAction
     data class OnTabSelected(val index: Int) : BookListScreenUiAction
 }
+
+sealed interface BookListScreenUiEvent {
+    data class NavigateToNextScreen(val book: Book) : BookListScreenUiEvent
+}
