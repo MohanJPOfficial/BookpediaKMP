@@ -4,6 +4,7 @@ import com.mohanjp.bookPediaKmp.book.data.network.KtorRemoteDataSource
 import com.mohanjp.bookPediaKmp.book.data.network.RemoteBookDataSource
 import com.mohanjp.bookPediaKmp.book.data.repository.BookRepositoryImpl
 import com.mohanjp.bookPediaKmp.book.domain.repository.BookRepository
+import com.mohanjp.bookPediaKmp.book.presentation.SelectedBookViewModel
 import com.mohanjp.bookPediaKmp.book.presentation.bookList.BookListViewModel
 import com.mohanjp.bookPediaKmp.core.data.util.HttpClientFactory
 import org.koin.core.module.Module
@@ -21,4 +22,5 @@ val sharedModule = module {
     singleOf(::BookRepositoryImpl).bind<BookRepository>()
     
     viewModelOf(::BookListViewModel)
+    viewModelOf(::SelectedBookViewModel)
 }
