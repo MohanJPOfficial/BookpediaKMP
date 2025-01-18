@@ -1,13 +1,8 @@
 package com.mohanjp.bookPediaKmp.app
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -15,6 +10,9 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.mohanjp.bookPediaKmp.book.presentation.SelectedBookViewModel
+import com.mohanjp.bookPediaKmp.book.presentation.bookDetail.BookDetailScreenRoot
+import com.mohanjp.bookPediaKmp.book.presentation.bookDetail.BookDetailScreenUiAction
+import com.mohanjp.bookPediaKmp.book.presentation.bookDetail.BookDetailViewModel
 import com.mohanjp.bookPediaKmp.book.presentation.bookList.BookListScreenRoot
 import com.mohanjp.bookPediaKmp.book.presentation.bookList.BookListViewModel
 import com.mohanjp.bookPediaKmp.core.presentation.util.sharedKoinViewModel
@@ -55,14 +53,21 @@ fun AppNavigation() {
                 val args = entry.toRoute<Route.BookDetail>()
 
                 val selectedBookSharedViewModel = entry.sharedKoinViewModel<SelectedBookViewModel>(navController)
+                val viewModel = koinViewModel<BookDetailViewModel>()
                 val selectedBook by selectedBookSharedViewModel.selectedBook.collectAsStateWithLifecycle()
 
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("Book detail screen >> Book: $selectedBook ")
+                LaunchedEffect(selectedBook) {
+                    selectedBook?.let { book ->
+                        viewModel.onUiAction(BookDetailScreenUiAction.OnSelectedBookChange(book))
+                    }
                 }
+
+                BookDetailScreenRoot(
+                    viewModel = viewModel,
+                    navigateBack = {
+                        navController.navigateUp()
+                    }
+                )
             }
         }
     }
