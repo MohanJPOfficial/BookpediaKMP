@@ -1,5 +1,6 @@
 package com.mohanjp.bookPediaKmp.book.data.network
 
+import com.mohanjp.bookPediaKmp.book.data.dto.BookWorkDto
 import com.mohanjp.bookPediaKmp.book.data.dto.SearchResponseDto
 import com.mohanjp.bookPediaKmp.core.data.util.safeCall
 import com.mohanjp.bookPediaKmp.core.domain.util.DataError
@@ -31,8 +32,18 @@ class KtorRemoteDataSource(
         }
     }
 
+    override suspend fun getBookDetails(bookWorkId: String): Result<BookWorkDto, DataError.Remote> {
+        return safeCall<BookWorkDto> {
+            httpClient.get(
+                urlString = getBookDetailUrl(bookWorkId)
+            )
+        }
+    }
+
     private companion object {
         const val BASE_URL = "https://openlibrary.org"
         const val SEARCH_BOOKS_URL = "$BASE_URL/search.json"
+
+        fun getBookDetailUrl(bookId: String) = "$BASE_URL/works/$bookId.json"
     }
 }
