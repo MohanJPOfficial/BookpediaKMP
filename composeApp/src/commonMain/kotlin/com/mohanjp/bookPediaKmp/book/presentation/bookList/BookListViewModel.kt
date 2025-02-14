@@ -30,6 +30,7 @@ class BookListViewModel(
 
     private var cachedBooks = emptyList<Book>()
     private var searchJob: Job? = null
+    private var favoriteBooksJob: Job? = null
 
     private val _uiState = MutableStateFlow(BookListScreenUiState())
     val uiState = _uiState
@@ -37,6 +38,7 @@ class BookListViewModel(
             if (cachedBooks.isEmpty()) {
                 observeSearchQuery()
             }
+            observeFavoriteBooks()
         }.stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5_000L),
@@ -70,6 +72,19 @@ class BookListViewModel(
                 }
             }
         }
+    }
+
+    private fun observeFavoriteBooks() {
+        favoriteBooksJob?.cancel()
+        favoriteBooksJob = bookRepository
+            .getFavoriteBooks()
+            .onEach { books ->
+                _uiState.update {
+                    it.copy(
+                        favoriteBooks = books
+                    )
+                }
+            }.launchIn(viewModelScope)
     }
 
     private fun observeSearchQuery() {

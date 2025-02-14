@@ -1,6 +1,7 @@
 package com.mohanjp.bookPediaKmp.book.data.mappers
 
 import com.mohanjp.bookPediaKmp.book.data.dto.SearchedBookDto
+import com.mohanjp.bookPediaKmp.book.data.local.entity.BookEntity
 import com.mohanjp.bookPediaKmp.book.domain.model.Book
 
 fun SearchedBookDto.toBook(): Book {
@@ -20,5 +21,37 @@ fun SearchedBookDto.toBook(): Book {
         ratingCount = ratingsCount,
         numPages = numPagesMedian,
         numEditions = numEditions ?: 0
+    )
+}
+
+fun Book.toBookEntity(): BookEntity {
+    return BookEntity(
+        id = id,
+        title = title,
+        description = description,
+        imageUrl = imageUrl,
+        languages = languages,
+        authors = authors,
+        firstPublishYear = firstPublishYear,
+        ratingsAverage = averageRating,
+        ratingsCount = ratingCount,
+        numPagesMedian = numPages,
+        numEditions = numEditions
+    )
+}
+
+fun BookEntity.toBook(): Book {
+    return Book(
+        id = id,
+        title = title,
+        imageUrl = imageUrl,
+        authors = authors,
+        description = description,
+        languages = languages,
+        firstPublishYear = firstPublishYear,
+        averageRating = ratingsAverage,
+        ratingCount = ratingsCount,
+        numPages = numPagesMedian,
+        numEditions = numEditions
     )
 }

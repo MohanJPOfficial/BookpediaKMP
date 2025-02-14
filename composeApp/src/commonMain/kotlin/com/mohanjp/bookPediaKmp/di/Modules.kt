@@ -1,5 +1,8 @@
 package com.mohanjp.bookPediaKmp.di
 
+import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import com.mohanjp.bookPediaKmp.book.data.local.DatabaseFactory
+import com.mohanjp.bookPediaKmp.book.data.local.FavoriteBookDatabase
 import com.mohanjp.bookPediaKmp.book.data.network.KtorRemoteDataSource
 import com.mohanjp.bookPediaKmp.book.data.network.RemoteBookDataSource
 import com.mohanjp.bookPediaKmp.book.data.repository.BookRepositoryImpl
@@ -21,7 +24,18 @@ val sharedModule = module {
     
     singleOf(::KtorRemoteDataSource).bind<RemoteBookDataSource>()
     singleOf(::BookRepositoryImpl).bind<BookRepository>()
-    
+
+    /**
+     * Database
+     */
+    single {
+        get<DatabaseFactory>()
+            .create()
+            .setDriver(BundledSQLiteDriver())
+            .build()
+    }
+    single { get<FavoriteBookDatabase>().favoriteBookDao }
+
     viewModelOf(::BookListViewModel)
     viewModelOf(::SelectedBookViewModel)
     viewModelOf(::BookDetailViewModel)

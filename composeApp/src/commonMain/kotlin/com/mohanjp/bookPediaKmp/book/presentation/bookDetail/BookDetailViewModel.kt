@@ -10,6 +10,8 @@ import com.mohanjp.bookPediaKmp.core.domain.util.onSuccess
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -27,6 +29,7 @@ class BookDetailViewModel(
     val uiState = _uiState
         .onStart {
             fetchBookDescription()
+            observeFavoriteStatus()
         }.stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5_000L),
@@ -43,7 +46,7 @@ class BookDetailViewModel(
             }
 
             BookDetailScreenUiAction.OnFavoriteClick -> {
-
+                handleFavoriteBookStatus()
             }
 
             is BookDetailScreenUiAction.OnSelectedBookChange -> {
@@ -54,6 +57,28 @@ class BookDetailViewModel(
                 }
             }
         }
+    }
+
+    private fun handleFavoriteBookStatus() = viewModelScope.launch {
+        if (uiState.value.isFavorite) {
+            bookRepository.deleteBookFromFavorites(bookId)
+        } else {
+            uiState.value.book?.let { book ->
+                bookRepository.markBookAsFavorite(book)
+            }
+        }
+    }
+
+    private fun observeFavoriteStatus() {
+        bookRepository
+            .isBookFavorite(bookId)
+            .onEach { isFavorite ->
+                _uiState.update {
+                    it.copy(
+                        isFavorite = isFavorite
+                    )
+                }
+            }.launchIn(viewModelScope)
     }
 
     private fun fetchBookDescription() = viewModelScope.launch {
