@@ -1,6 +1,7 @@
 package com.mohanjp.bookPediaKmp.book.presentation.bookDetail
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -8,13 +9,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -37,6 +38,7 @@ import com.mohanjp.bookPediaKmp.book.presentation.bookDetail.components.BookChip
 import com.mohanjp.bookPediaKmp.book.presentation.bookDetail.components.ChipSize
 import com.mohanjp.bookPediaKmp.book.presentation.bookDetail.components.TitledContent
 import com.mohanjp.bookPediaKmp.core.presentation.util.ObserveAsEvent
+import com.mohanjp.bookPediaKmp.core.presentation.util.PulseAnimation
 import com.mohanjp.bookPediaKmp.core.presentation.util.SandYellow
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -191,7 +193,14 @@ private fun BookDetailScreen(
                 )
 
                 if (uiState.isLoading) {
-                    CircularProgressIndicator()
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        PulseAnimation(
+                            modifier = Modifier.size(60.dp)
+                        )
+                    }
                 } else {
                     Text(
                         text = if (uiState.book.description.isNullOrBlank()) {

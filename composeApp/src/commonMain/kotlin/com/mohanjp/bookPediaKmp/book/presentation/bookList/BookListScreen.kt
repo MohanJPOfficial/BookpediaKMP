@@ -8,13 +8,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
@@ -43,6 +43,7 @@ import com.mohanjp.bookPediaKmp.book.presentation.bookList.components.BookSearch
 import com.mohanjp.bookPediaKmp.core.presentation.util.DarkBlue
 import com.mohanjp.bookPediaKmp.core.presentation.util.DesertWhite
 import com.mohanjp.bookPediaKmp.core.presentation.util.ObserveAsEvent
+import com.mohanjp.bookPediaKmp.core.presentation.util.PulseAnimation
 import com.mohanjp.bookPediaKmp.core.presentation.util.SandYellow
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -61,7 +62,6 @@ fun BookListScreenRoot(
             }
         }
     }
-
 
     BookListScreen(
         uiState = uiState,
@@ -197,7 +197,14 @@ fun BookListScreen(
                         when(pageIndex) {
                             0 -> {
                                 if(uiState.isLoading) {
-                                    CircularProgressIndicator()
+                                    Box(
+                                        modifier = Modifier.fillMaxSize(),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        PulseAnimation(
+                                            modifier = Modifier.size(60.dp)
+                                        )
+                                    }
                                 } else {
                                     when {
                                         uiState.errorMessage != null -> {

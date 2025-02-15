@@ -1,5 +1,7 @@
 package com.mohanjp.bookPediaKmp.book.presentation.bookList.components
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +19,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -29,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
@@ -36,9 +38,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bookpediakmp.composeapp.generated.resources.Res
 import bookpediakmp.composeapp.generated.resources.book_error
+import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 import com.mohanjp.bookPediaKmp.book.domain.model.Book
 import com.mohanjp.bookPediaKmp.core.presentation.util.LightBlue
+import com.mohanjp.bookPediaKmp.core.presentation.util.PulseAnimation
 import com.mohanjp.bookPediaKmp.core.presentation.util.SandYellow
 import org.jetbrains.compose.resources.painterResource
 import kotlin.math.round
@@ -91,9 +95,19 @@ fun BookListItem(
                 )
 
                 val painterState by painter.state.collectAsStateWithLifecycle()
+                val transition by animateFloatAsState(
+                    targetValue = if(painterState is AsyncImagePainter.State.Success) {
+                        1f
+                    } else {
+                        0f
+                    },
+                    animationSpec = tween(durationMillis = 800)
+                )
 
                 when (val result = imageLoadResult) {
-                    null -> CircularProgressIndicator()
+                    null -> PulseAnimation(
+                        modifier = Modifier.size(60.dp)
+                    )
                     else -> {
                         Image(
                             painter = if (result.isSuccess) painter else painterResource(Res.drawable.book_error),
@@ -103,7 +117,13 @@ fun BookListItem(
                                 .aspectRatio(
                                     ratio = 0.65f,
                                     matchHeightConstraintsFirst = true
-                                )
+                                ).graphicsLayer {
+                                    rotationX = (1f - transition) * 30f
+
+                                    val scale = 0.8f + (0.2f * transition)
+                                    scaleX = scale
+                                    scaleY = scale
+                                }
                         )
                     }
                 }

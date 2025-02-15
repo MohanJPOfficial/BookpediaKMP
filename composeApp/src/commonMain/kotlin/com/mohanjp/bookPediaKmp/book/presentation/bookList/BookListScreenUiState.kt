@@ -4,10 +4,10 @@ import com.mohanjp.bookPediaKmp.book.domain.model.Book
 import com.mohanjp.bookPediaKmp.core.presentation.util.UiText
 
 data class BookListScreenUiState(
-    val searchQuery: String = "Kotlin",
+    val searchQuery: String = "Android",
     val searchResults: List<Book> = emptyList(),
     val favoriteBooks: List<Book> = emptyList(),
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val selectedTabIndex: Int = 0,
     val errorMessage: UiText? = null
 )
